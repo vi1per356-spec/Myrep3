@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+.buildozer/
+bin/
+*.session
+*.session-journal
+training_data/
