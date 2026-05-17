@@ -1,0 +1,50 @@
+name: Build APK
+
+# Builds the installable Android APK on GitHub's runners (open internet)
+# and publishes it as a downloadable artifact + a GitHub Release.
+
+on:
+  push:
+    branches:
+      - claude/ukraine-threat-tracker-client-77V9A
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build APK with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          workdir: client
+          buildozer_version: stable
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ukraine-threat-tracker-apk
+          path: ${{ steps.buildozer.outputs.filename }}
+          if-no-files-found: error
+
+      - name: Publish APK to a Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-latest
+          name: Ukraine Threat Tracker APK (latest)
+          files: ${{ steps.buildozer.outputs.filename }}
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
