@@ -29,16 +29,26 @@ async def run_telegram():
 
     client = TelegramClient(config.TG_SESSION_NAME,
                             config.TG_API_ID, config.TG_API_HASH)
-    await client.start(phone=config.TG_PHONE)
+    # If TG_PHONE is blank, Telethon prompts for the phone number, then the
+    # login code, then the 2FA password right here in the Termux terminal.
+    phone = config.TG_PHONE or (lambda: input("[tg] phone number: "))
+    await client.start(phone=phone)
     print("[tg] connected as Telegram user")
 
-    # Resolve channels (read-only; we never join).
+    # Resolve channels (read-only; we never join). Fall back to numeric ids.
     entities = []
-    for ch in config.TG_CHANNELS:
+    ids = list(getattr(config, "TG_CHANNEL_IDS", []))
+    for i, ch in enumerate(config.TG_CHANNELS):
         try:
             entities.append(await client.get_entity(ch))
         except Exception as e:
             print(f"[tg] cannot resolve {ch}: {e}")
+            if i < len(ids):
+                try:
+                    entities.append(await client.get_entity(ids[i]))
+                    print(f"[tg] resolved {ch} via id {ids[i]}")
+                except Exception as e2:
+                    print(f"[tg] id fallback failed for {ch}: {e2}")
     if not entities:
         print("[tg] no channels configured/resolved")
 

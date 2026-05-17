@@ -19,22 +19,37 @@ SECRET_KEY = os.environ.get("UTT_SECRET", "change-me-9f3a1c7e2b8d4f60")
 # ---------------------------------------------------------------------------
 # Gemini (Google Generative AI)
 # ---------------------------------------------------------------------------
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "PUT-YOUR-GEMINI-API-KEY-HERE")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "AIzaSyCXvm6tQI0rgn1uztICb8-kRwfnl2DXMEQ")
 GEMINI_MODEL = "gemini-2.0-flash"
 
 # ---------------------------------------------------------------------------
 # Telegram (Telethon user session – reads channels, never subscribes)
 # ---------------------------------------------------------------------------
-TG_API_ID = int(os.environ.get("TG_API_ID", "0"))
-TG_API_HASH = os.environ.get("TG_API_HASH", "PUT-YOUR-API-HASH-HERE")
-TG_PHONE = os.environ.get("TG_PHONE", "+380000000000")
+TG_API_ID = int(os.environ.get("TG_API_ID", "29312779"))
+TG_API_HASH = os.environ.get("TG_API_HASH", "71dce4edf2a60aed6aced69e202fa8dd")
+# Leave blank: Telethon will prompt for the phone number, login code and
+# 2FA password in the Termux terminal on first run.
+TG_PHONE = os.environ.get("TG_PHONE", "")
 # Session string can be created interactively the first time the reader runs.
 TG_SESSION_NAME = "utt_session"
 
 # Channels to read (public @usernames or t.me links or numeric ids).
 # Fill this list once you provide the channel links.
 TG_CHANNELS: list[str] = [
-    # "https://t.me/example_channel",
+    "https://t.me/ukraine_pyxx",
+    "https://t.me/kudy_letyt",
+    "https://t.me/Ukrainian_Intelligence",
+    "https://t.me/povitryanatrivogaaa",
+    "https://t.me/testchanel1488_67",
+]
+
+# Fallback numeric ids (used automatically if a username fails to resolve).
+TG_CHANNEL_IDS: list[int] = [
+    -1002133315828,
+    -1001875486764,
+    -1001884189327,
+    -1001547049625,
+    -1003990673187,
 ]
 
 # ---------------------------------------------------------------------------
